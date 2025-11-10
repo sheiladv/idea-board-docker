@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  # --- BACKEND ---
+  backend:
+    build: ./backend/idea-board-backend
+    container_name: idea-board-backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/idea-board-backend/.env
+    depends_on:
+      - db
+    networks:
+      - idea-net
+
+  # --- FRONTEND ---
+  frontend:
+    build:
+      context: ./frontend/idea-board-frontend
+      args:
+        VITE_API_URL: http://localhost:3000
+    container_name: idea-board-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - idea-net
+
+  # --- DATABASE (PostgreSQL) ---
+  db:
+    image: postgres:15
+    container_name: idea-board-db
+    env_file:
+      - ./backend/idea-board-backend/.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - idea-net
+
+# --- RED COMPARTIDA ENTRE SERVICIOS ---
+networks:
+  idea-net:
+
+# --- VOLUMEN PERSISTENTE PARA LA DB ---
+volumes:
+  pgdata:

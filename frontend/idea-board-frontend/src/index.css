@@ -1,0 +1,46 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f5f7fa;
+  padding: 40px;
+  color: #333;
+}
+
+.app-container {
+  max-width: 700px;
+  margin: auto;
+}
+
+.idea-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.idea-form input,
+.idea-form textarea {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.idea-form button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.idea-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.idea-card {
+  background: white;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
