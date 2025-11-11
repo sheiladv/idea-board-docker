@@ -1,30 +1,40 @@
-# --- Etapa 1: Build de la aplicación ---
-FROM node:20-alpine AS build
+# ==============================
+# 1️⃣ STAGE: Build
+# ==============================
+FROM node:20-alpine AS builder
 
-# Directorio de trabajo
+# Define directorio de trabajo
 WORKDIR /app
 
-# Copiamos dependencias
+# Copia los archivos necesarios
 COPY package*.json ./
-RUN npm install
 
-# Copiamos el resto del código
+# Instala dependencias
+RUN npm ci
+
+# Copia el código fuente
 COPY . .
 
-# --- ARG para la URL del backend ---
-ARG VITE_API_URL=http://localhost:3000
-
-# Compilamos la app con Vite
+# Compila la aplicación para producción
 RUN npm run build
 
-# --- Etapa 2: Servir con Nginx ---
-FROM nginx:stable-alpine
+# ==============================
+# 2️⃣ STAGE: Production
+# ==============================
+FROM nginx:1.29-alpine AS production
 
-# Copiamos el build generado
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copia los archivos estáticos generados por Vite al directorio de Nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Eliminamos la configuración default y exponemos el puerto
+# Elimina la configuración por defecto y agrega una custom (opcional)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expone el puerto de Nginx
 EXPOSE 80
 
-# Comando por defecto de Nginx
+# ✅ HEALTHCHECK: verifica que el sitio responda correctamente
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1
+
+# Comando de inicio
 CMD ["nginx", "-g", "daemon off;"]

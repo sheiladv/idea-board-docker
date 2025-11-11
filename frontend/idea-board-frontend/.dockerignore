@@ -1,5 +1,42 @@
+# Dependencies
 node_modules
+npm-debug.log
+
+# Build artifacts
 dist
-.vscode
+build
+
+# Environment files
 .env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+README.md
+docs
+
+# Testing
+coverage
+test
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Vite
+.vite
